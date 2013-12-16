@@ -33,6 +33,8 @@ public class Board {
 	static String gameID;
 	static boolean isWhite;
 	
+	boolean playerKingFound, oppKingFound;
+	
 	byte[][] board;
 	String moveToMake;
 	
@@ -40,6 +42,9 @@ public class Board {
 		
 		Board.gameID = gameID;
 		Board.isWhite = playerIsWhite;
+		
+		playerKingFound = false;
+		oppKingFound = false;
 		
 		board = new byte[8][8];
 		if(playerIsWhite){
@@ -89,6 +94,8 @@ public class Board {
 	}
 	
 	public Board(Board old){
+		playerKingFound = false;
+		oppKingFound = false;
 		this.board = new byte[8][8];
 		for(int i = 0;i < 8;i++){
 			for(int j = 0;j < 8;j++)
@@ -103,13 +110,27 @@ public class Board {
 		for(int i = 0;i < 8;i++){
 			for(int j = 0;j < 8;j++){
 				piece = board[i][j];
-				if(Math.abs(piece) == playerKing)
+				if(piece == playerKing)
+					value += 1000*piece;
+				else if(piece == oppKing)
 					value += 1000*piece;
 				else
 					value += piece;
 			}
 		}
 		return value;
+	}
+	
+	public boolean kingsFound(){
+		for(int i = 0;i < 8;i++){
+			for(int j = 0;j < 8; j++){
+				if(board[i][j] == playerKing)
+					playerKingFound = true;
+				if(board[i][j] == oppKing)
+					oppKingFound = true;
+			}
+		}
+		return playerKingFound && oppKingFound;
 	}
 	
 	public void move(String moveString){
@@ -422,12 +443,32 @@ public class Board {
 			}
 			if(i == doubleRow && board[i+2*pawnMove][j] == noPiece)
 				moves.push("P" + getMoveStringCoord(i,j,i+2*pawnMove,j));
-			try{if(board[i+pawnMove][j] == noPiece)
-				moves.push("P" + getMoveStringCoord(i,j,i+pawnMove,j));}catch(ArrayIndexOutOfBoundsException e){}
-			try{if(board[i+pawnMove][j+1]*side < 0)
-				moves.push("P" + getMoveStringCoord(i,j,i+pawnMove,j+1));}catch(ArrayIndexOutOfBoundsException e){}
-			try{if(board[i + pawnMove][j-1]*side < 0)
-				moves.push("P" + getMoveStringCoord(i,j,i+pawnMove,j-1));}catch(ArrayIndexOutOfBoundsException e){}
+			try{
+				if(board[i+pawnMove][j] == noPiece){
+					if(i+pawnMove == 0 || i+pawnMove == 7)
+						moves.push("P" + getMoveStringCoord(i,j,i+pawnMove,j)+"Q");
+					else
+						moves.push("P" + getMoveStringCoord(i,j,i+pawnMove,j));
+				}
+			}catch(ArrayIndexOutOfBoundsException e){}
+			
+			try{
+				if(board[i+pawnMove][j+1]*side < 0){
+					if(i+pawnMove == 0 || i+pawnMove == 7)
+						moves.push("P" + getMoveStringCoord(i,j,i+pawnMove,j+1)+"Q");
+					else
+						moves.push("P" + getMoveStringCoord(i,j,i+pawnMove,j+1));
+				}
+			}catch(ArrayIndexOutOfBoundsException e){}
+			
+			try{
+				if(board[i + pawnMove][j-1]*side < 0){
+					if(i+pawnMove == 0 || i+pawnMove == 7)
+						moves.push("P" + getMoveStringCoord(i,j,i+pawnMove,j-1)+"Q");
+					else
+						moves.push("P" + getMoveStringCoord(i,j,i+pawnMove,j-1));
+				}
+			}catch(ArrayIndexOutOfBoundsException e){}
 		}
 		return moves;
 	}
@@ -505,8 +546,8 @@ public class Board {
 	
 	public static void main(String[] args){
 		
-		String gameID = "1234"; // before running set these vars with values
-		boolean isWhite = true; // from http://www.bencarle.com/chess/startgame
+		String gameID = "1250"; // before running set these vars with values
+		boolean isWhite = false; // from http://www.bencarle.com/chess/startgame
 		
 		Board board = new Board(gameID,isWhite);
 		board.play();
