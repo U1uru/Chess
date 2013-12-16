@@ -7,7 +7,6 @@ public class Search {
 	static int MAX_DEPTH = 6;
 	
 	public static int negaMax(Board board,int depth,int alpha,int beta,int color) {
-		long currentTime = System.currentTimeMillis();
 	    if (depth == MAX_DEPTH || !board.kingsFound())
 	    	return color * board.eval();
 	    int bestValue = -1000000000;

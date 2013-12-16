@@ -546,7 +546,7 @@ public class Board {
 	
 	public static void main(String[] args){
 		
-		String gameID = "1272"; // before running set these vars with values
+		String gameID = "1273"; // before running set these vars with values
 		boolean isWhite = true; // from http://www.bencarle.com/chess/startgame
 		
 		Board board = new Board(gameID,isWhite);
