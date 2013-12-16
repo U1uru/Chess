@@ -546,10 +546,18 @@ public class Board {
 	
 	public static void main(String[] args){
 		
-		String gameID = "1250"; // before running set these vars with values
-		boolean isWhite = false; // from http://www.bencarle.com/chess/startgame
+		String gameID = "1272"; // before running set these vars with values
+		boolean isWhite = true; // from http://www.bencarle.com/chess/startgame
 		
 		Board board = new Board(gameID,isWhite);
 		board.play();
+//		board.move("Pe2e4");
+//		board.move("Pe2e4");
+//		board.move("Pe7e5");
+//		board.move("Bf1c4");
+//		board.move("Qd8h4");
+//		board.move("Qd1f3");
+//		System.out.println(board);
+//		System.out.println(Search.search(board,0,-1000000000,1000000000,1));
 	}
 }

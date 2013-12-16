@@ -1,22 +1,15 @@
 package chesster;
 
-import java.util.Date;
 import java.util.Stack;
 
 public class Search {
 
 	static int MAX_DEPTH = 6;
-	static Date startTime = new Date();
 	
 	public static int negaMax(Board board,int depth,int alpha,int beta,int color) {
-		System.out.println("Searching at depth: "+depth+".");
-		Date currentTime = new Date();
-		System.out.println((currentTime.getTime()-startTime.getTime())/1000.0 + " seconds");
-	    if (depth == MAX_DEPTH || !board.kingsFound() || (currentTime.getTime() - startTime.getTime()) > 1000){
-	    	Date time = new Date();
-	    	startTime.setTime(time.getTime());
+		long currentTime = System.currentTimeMillis();
+	    if (depth == MAX_DEPTH || !board.kingsFound())
 	    	return color * board.eval();
-	    }
 	    int bestValue = -1000000000;
 	    Stack<String> moves = board.generateMoves(color);
 	    while(!moves.isEmpty()){
@@ -47,8 +40,6 @@ public class Search {
 			String move = moves.pop();
 			Board newBoard = new Board(board);
 			newBoard.move(move);
-			Date time = new Date();
-			startTime.setTime(time.getTime());
 			int value = -negaMax(newBoard,depth+1,-beta,-alpha,-color);
 			if(value > bestValue){
 				bestValue = value;
